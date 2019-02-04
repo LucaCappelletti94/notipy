@@ -1,3 +1,4 @@
-
 \.vscode/
 virtual_*/
+__pycache__/
+notipy.json
