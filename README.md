@@ -2,7 +2,10 @@
 A simple python package to send you and any other receiver an email when a portion of code is done running.
 
 ## Setup
-Just run `pip install notipy`
+Just run:
+```bash
+pip install notipy
+```
 
 ## Usage example
 ### Creating the configuration file
