@@ -4,12 +4,12 @@ A simple python package to send you and any other receiver an email when a porti
 ## Setup
 Just run:
 ```bash
-pip install notipy
+pip install notipy_me
 ```
 
 ## Usage example
 ### Creating the configuration file
-Firstly you would have to setup a file, by default called `notipy.json`.
+Firstly you would have to setup a file, by default called `notipy_me.json`.
 
 I **strongly** advise for you to keep this file out of the repository and generally DO NOT make it public, as it must contain your chosen email password.
 
@@ -61,21 +61,21 @@ your_script_directory/
 ```
 
 ### A basic example script
-In these examples it automatically loads the configuration from the path `"./notipy.json"`.
+In these examples it automatically loads the configuration from the path `"./notipy_me.json"`.
 
-#### Using notipy as a context manager
+#### Using notipy_me as a context manager
 
 ```py
-from notipy import Notipy
+from notipy_me import Notipy
 
 with Notipy():
     foo()
 ```
 
-#### Using notipy as a decorator
+#### Using notipy_me as a decorator
 
 ```py
-from notipy import Notipy
+from notipy_me import Notipy
 
 @Notipy()
 def foo():
@@ -84,19 +84,19 @@ def foo():
 ```
 
 ### Loading from custom path
-#### Using notipy as a context manager
+#### Using notipy_me as a context manager
 
 ```py
-from notipy import Notipy
+from notipy_me import Notipy
 
 with Notipy("./path/to/my/file.json"):
     foo()
 ```
 
-#### Using notipy as a decorator
+#### Using notipy_me as a decorator
 
 ```py
-from notipy import Notipy
+from notipy_me import Notipy
 
 @Notipy("./path/to/my/file.json")
 def foo():
