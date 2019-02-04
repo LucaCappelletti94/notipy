@@ -1,4 +1,4 @@
-# Notipy
+# Notipy Me
 A simple python package to send you and any other receiver an email when a portion of code is done running.
 
 ## Setup
