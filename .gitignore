@@ -3,3 +3,6 @@ virtual_*/
 __pycache__/
 notipy.json
 \.DS_Store
+build/
+dist/
+*.egg-info/
