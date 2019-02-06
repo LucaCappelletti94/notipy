@@ -97,6 +97,18 @@ Using notipy_me as a context manager
    with Notipy():
        foo()
 
+Example with running external script
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The following is a basic example on how to use notipy with an external script.
+
+.. code:: py
+
+   from notipy_me import Notipy
+   from subprocess import run
+
+   with Notipy():
+       run(["python", "script.py", "some_argument"], capture_output=True)
+
 Using notipy_me as a decorator
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
