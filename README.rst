@@ -12,6 +12,12 @@ Just run:
 .. code:: bash
 
    pip install notipy_me
+   
+Preview
+-------------------------------
+You will receive mails such as the following (in both images the server name and email server has been deleted):
+
+|started| |completed|
 
 Usage example
 -------------
@@ -82,3 +88,9 @@ other mail providers it works fine.
 
 .. |pip| image:: https://badge.fury.io/py/notipy_me.svg
     :target: https://badge.fury.io/py/notipy_me
+    
+.. |started| image:: https://github.com/LucaCappelletti94/notipy_me/blob/master/started.png?raw=true
+   :width: 200px
+
+.. |completed| image:: https://github.com/LucaCappelletti94/notipy_me/blob/master/completed.png?raw=true
+   :width: 200px
