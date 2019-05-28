@@ -72,7 +72,7 @@ setup(
     # simple. Or you can use find_packages().
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
 
-    install_requires=["humanize"]
+    install_requires=["humanize", "validate_version_code"]
 )
 
 

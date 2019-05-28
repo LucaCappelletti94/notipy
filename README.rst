@@ -1,5 +1,6 @@
 Notipy Me
 =========
+|sonar_quality| |sonar_maintainability| |sonar_coverage| |pip|
 
 A simple python package to send you and any other receiver an email when a portion of code is done running.
 
@@ -69,3 +70,19 @@ Gmail
 I cannot manage to get gmail to work, but it keeps rising an error
 logging in with the credentials, even though they are correct. With the
 other mail providers it works fine.
+
+.. |sonar_quality| image:: https://sonarcloud.io/api/project_badges/measure?project=LucaCappelletti94_arrp&metric=alert_status
+    :target: https://sonarcloud.io/dashboard/index/LucaCappelletti94_arrp
+
+.. |sonar_maintainability| image:: https://sonarcloud.io/api/project_badges/measure?project=LucaCappelletti94_arrp&metric=sqale_rating
+    :target: https://sonarcloud.io/dashboard/index/LucaCappelletti94_arrp
+
+.. |sonar_coverage| image:: https://sonarcloud.io/api/project_badges/measure?project=LucaCappelletti94_arrp&metric=coverage
+    :target: https://sonarcloud.io/dashboard/index/LucaCappelletti94_arrp
+
+.. |code_climate_maintainability| image:: https://api.codeclimate.com/v1/badges/25fb7c6119e188dbd12c/maintainability
+   :target: https://codeclimate.com/github/LucaCappelletti94/arrp/maintainability
+   :alt: Maintainability
+
+.. |pip| image:: https://badge.fury.io/py/arrp.svg
+    :target: https://badge.fury.io/py/arrp
