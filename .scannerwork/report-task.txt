@@ -3,5 +3,5 @@ projectKey=LucaCappelletti94_notipy_me
 serverUrl=https://sonarcloud.io
 serverVersion=7.8.0.25269
 dashboardUrl=https://sonarcloud.io/dashboard?id=LucaCappelletti94_notipy_me
-ceTaskId=AWr-WiIJ1j-PIqXcsS7i
-ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AWr-WiIJ1j-PIqXcsS7i
+ceTaskId=AWr-XEpeOR_DEgo-qFGM
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AWr-XEpeOR_DEgo-qFGM
