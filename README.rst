@@ -90,7 +90,7 @@ other mail providers it works fine.
     :target: https://badge.fury.io/py/notipy_me
     
 .. |started| image:: https://github.com/LucaCappelletti94/notipy_me/blob/master/started.png?raw=true
-   :width: 200px
+   :width: 45%
 
 .. |completed| image:: https://github.com/LucaCappelletti94/notipy_me/blob/master/completed.png?raw=true
-   :width: 200px
+   :width: 45%
