@@ -19,6 +19,14 @@ You will receive mails such as the following (in both images the server name and
 
 |started| |completed|
 
+<img src="https://github.com/LucaCappelletti94/notipy_me/blob/master/started.png?raw=true">
+
+.. |started| image:: https://github.com/LucaCappelletti94/notipy_me/blob/master/started.png?raw=true
+   :width: 45%
+
+.. |completed| image:: https://github.com/LucaCappelletti94/notipy_me/blob/master/completed.png?raw=true
+   :width: 45%
+
 Usage example
 -------------
 A basic usage example can be the following:
@@ -89,8 +97,4 @@ other mail providers it works fine.
 .. |pip| image:: https://badge.fury.io/py/notipy_me.svg
     :target: https://badge.fury.io/py/notipy_me
     
-.. |started| image:: https://github.com/LucaCappelletti94/notipy_me/blob/master/started.png?raw=true
-   :width: 45%
 
-.. |completed| image:: https://github.com/LucaCappelletti94/notipy_me/blob/master/completed.png?raw=true
-   :width: 45%
