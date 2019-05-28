@@ -12,10 +12,10 @@ import humanize
 import time
 
 class Notipy(ContextDecorator):
-    def __init__(self, task:str, email:str, recipients:List[str]=None, port:int=465, server:str=None, send_start_mail:bool=False):
+    def __init__(self, task:str, email:str=None, recipients:List[str]=None, port:int=465, server:str=None, send_start_mail:bool=False):
         """Create a new istance of Notipy.
             task:str, name of the current task you are tracking execution of.
-            email:str, email from which to send the email.
+            email:str, email from which to send the email. If None, it will be asked.
             recipients:List[str]=None, list of mails to send it to. By default, only your own.
             port:int, the port through which send the email.
             server:str, the server of your email. By default extracted from the email.
@@ -23,11 +23,11 @@ class Notipy(ContextDecorator):
         """
         super(Notipy, self).__init__()
         self._task = task
-        self._email = email
-        self._recipients = [email] if recipients is None else recipients
+        self._email = input("Please insert your email: ") if email is None else email
+        self._recipients = [self._email] if recipients is None else recipients
         self._port = port
         self._server = "smtp.{server}".format(
-            server=".".join(email.split("@")[1].split(".")[-2:])
+            server=".".join(self._email.split("@")[1].split(".")[-2:])
         ) if server is None else server
         self._send_start_mail = send_start_mail
         self._password = getpass.getpass("Please insert your email password: ")

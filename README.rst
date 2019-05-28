@@ -24,7 +24,7 @@ Usage as decorator
 
     from notipy_me import Notipy
 
-    @Notipy("Long running script", "my_mail@myserver.com", send_start_mail=True)
+    @Notipy("Long running script", send_start_mail=True)
     def my_long_running_script():
         ...
 
@@ -35,13 +35,13 @@ Usage as context
 
     from notipy_me import Notipy
 
-    with Notipy("Long running script", "my_mail@myserver.com", send_start_mail=True):
+    with Notipy("Long running script", send_start_mail=True):
         my_long_running_script()
 
 Setting the mail password
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The script will ask you to insert the email password, and then you'll be set to go:
+The script will ask you to insert the email, if you haven't specified one, and its password, and then you'll be set to go:
 
 .. code:: bash
 

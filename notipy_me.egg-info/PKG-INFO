@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: notipy-me
-Version: 1.1.0
+Version: 1.1.1
 Summary: A simple python package to send you and any other receiver an email when a portion of code is done running.
 Home-page: https://github.com/LucaCappelletti94/notipy_me
 Author: Luca Cappelletti
@@ -32,7 +32,7 @@ Description: Notipy Me
         
             from notipy_me import Notipy
         
-            @Notipy("Long running script", "my_mail@myserver.com", send_start_mail=True)
+            @Notipy("Long running script", send_start_mail=True)
             def my_long_running_script():
                 ...
         
@@ -43,13 +43,13 @@ Description: Notipy Me
         
             from notipy_me import Notipy
         
-            with Notipy("Long running script", "my_mail@myserver.com", send_start_mail=True):
+            with Notipy("Long running script", send_start_mail=True):
                 my_long_running_script()
         
         Setting the mail password
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         
-        The script will ask you to insert the email password, and then you'll be set to go:
+        The script will ask you to insert the email, if you haven't specified one, and its password, and then you'll be set to go:
         
         .. code:: bash
         
