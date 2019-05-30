@@ -7,6 +7,6 @@
         "The working path is {pwd}."
     ],
     "the_whens":[
-        "The task started on {now}."
+        "The task started {elapsed} ago."
     ]
 }
