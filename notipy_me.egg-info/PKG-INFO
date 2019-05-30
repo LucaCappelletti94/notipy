@@ -1,6 +1,6 @@
-Metadata-Version: 1.1
+Metadata-Version: 2.1
 Name: notipy-me
-Version: 1.1.1
+Version: 1.2.1
 Summary: A simple python package to send you and any other receiver an email when a portion of code is done running.
 Home-page: https://github.com/LucaCappelletti94/notipy_me
 Author: Luca Cappelletti
@@ -70,6 +70,18 @@ Description: Notipy Me
                 send_start_mail=False # Whetever to send or not also a mail when the task starts.
             )
         
+        Preview
+        -------------------------------
+        You will receive mails such as the following (in both images the server name and email server has been deleted):
+        
+        |started| |completed|
+        
+        .. |started| image:: https://github.com/LucaCappelletti94/notipy_me/blob/master/started.png?raw=true
+           :width: 45%
+        
+        .. |completed| image:: https://github.com/LucaCappelletti94/notipy_me/blob/master/completed.png?raw=true
+           :width: 45%
+        
         Known issues
         ------------
         
@@ -90,7 +102,11 @@ Description: Notipy Me
         
         .. |pip| image:: https://badge.fury.io/py/notipy_me.svg
             :target: https://badge.fury.io/py/notipy_me
+            
+        
+        
 Platform: UNKNOWN
 Classifier: Development Status :: 4 - Beta
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Programming Language :: Python :: 3
+Provides-Extra: test
