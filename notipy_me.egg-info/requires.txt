@@ -2,6 +2,7 @@ humanize
 validate_email
 tabulate
 environments_utils
+validators
 
 [test]
 pytest
