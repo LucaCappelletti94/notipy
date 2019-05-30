@@ -179,7 +179,7 @@ class Notipy(ContextDecorator):
         self._report = df if self._report is None else pd.concat([
             self._report, df
         ])
-        if time.time() - self._last_report > self._config["report_timeout"]:
+        if time.time() - self._last_report > self._config["report_timeout"]*60*60:
             self._send_report()
 
     def __enter__(self):
