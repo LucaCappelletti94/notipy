@@ -3,3 +3,8 @@ virtual_*/
 __pycache__/
 notipy.json
 \.DS_Store
+\.ipynb_checkpoints/
+
+*.ipynb
+
+\.notipy\.json

@@ -30,6 +30,12 @@ def find_version(*file_paths):
 
 __version__ = find_version("notipy_me", "__version__.py")
 
+test_deps = ['pytest', 'pytest-cov', 'coveralls', 'validate_version_code']
+
+extras = {
+    'test': test_deps,
+}
+
 setup(
     name='notipy_me',
 
@@ -72,7 +78,9 @@ setup(
     # simple. Or you can use find_packages().
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
 
-    install_requires=["humanize", "validate_version_code"]
+    install_requires=["humanize", "validate_email", "tabulate"],
+    tests_require=test_deps,
+    extras_require=extras,
 )
 
 

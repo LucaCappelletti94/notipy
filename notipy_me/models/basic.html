@@ -3,14 +3,8 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Your task has started!</title>
-  <!-- Designed by https://github.com/kaytcat -->
-  <!-- Header image designed by Freepik.com -->
-
-
+  <title>model_title</title>
   <style type="text/css">
-  /* Take care of image borders and formatting */
-
   img {
     max-width: 600px;
     outline: none;
@@ -26,7 +20,34 @@
   .backgroundTable {margin:0 auto; padding:0; width:100%;}
   table td {border-collapse: collapse;}
   .ExternalClass * {line-height: 115%;}
-
+  .report_wrapper_table table {
+    width: 90%;
+    border-collapse: collapse;
+    border: none;
+    border-color: #eee;
+  }
+  .report_wrapper_table table thead {
+    background-color: #ccc;
+  }
+  .report_wrapper_table table tbody tr:nth-child(even) {
+    background-color: #fff;
+  }
+  .report_wrapper_table table tbody tr:nth-child(odd) {
+    background-color: #eee;
+  }
+  .report_wrapper_table table td {
+    padding: .5em;
+    text-align: center;
+  }
+  .report_wrapper_table table th {
+    text-align: center;
+  }
+  .report_wrapper_table table caption {
+    caption-side: bottom;
+  }
+  .report_wrapper_table table tbody tr:hover {
+    background-color: #add8e6;
+  }
 
   /* General styling */
 
@@ -172,13 +193,13 @@
                   <tr>
                     <td style="font-size:40px; font-weight: 600; color: #ffffff; text-align:center;" class="mobile-spacing">
                     <div class="mobile-br">&nbsp;</div>
-                      Your task has started!
+                      model_title
                     <br/>
                     </td>
                   </tr>
                   <tr>
                     <td style="font-size:24px; text-align:center; padding: 0 75px; color: #6f6f6f;" class="w320 mobile-spacing">
-                     We would like you to know that your task called "TASK_NAME" has started!
+                      model_subtitle
                     </td>
                   </tr>
                 </table>
@@ -205,24 +226,27 @@
                     <td style="text-align:left;">
                     <br>
                     <strong>The wheres</strong><br>
-                      The task is on SERVER_HOSTNAME.<br>
-                      The user logged is USERNAME.<br>
-                      The working path is WORKING_PATH.
+                      the_wheres
                     </td>
                     <td style="text-align:right; vertical-align:top;">
                     <br>
                     <b>The whens</b> <br>
-                    The task started on COMPLETION_DATE.
+                      the_whens
                     </td>
                   </tr>
                 </table>
-
+                <br>
+                <div class="report_wrapper_table">
+                  report_table
+                </div>
+                <br>
                 <table style="margin: 0 auto;" cellspacing="0" cellpadding="0" class="force-width-80">
                   <tr>
                     <td style="text-align: left;">
                     <br>
-                      You are receiving this email because SENDER has listed you within the recepients: you will receive another email like this when the task is completed.<br><br>
-                      <a href="https://github.com/LucaCappelletti94/notipy_me"><i>The notipy me team.</i></a>
+                    why_this_email
+                    <br>
+                    <a href='https://github.com/LucaCappelletti94/notipy_me'><i>notipy_me_sign</i></a>"
                     </td>
                   </tr>
                 </table>
@@ -232,22 +256,10 @@
               </td>
             </tr>
           </table>
-
-
-
-
-
-
-
           </td>
         </tr>
       </table>
-
     </center>
-
-
-
-
     </td>
   </tr>
 </table>

@@ -7,40 +7,112 @@ from smtplib import SMTP_SSL
 from datetime import datetime
 import socket
 import getpass
-from typing import List, Dict
+from typing import List, Dict, Callable, Tuple
 import humanize
 import time
+import pandas as pd
+from validate_email import validate_email
+from validators import domain
+from tabulate import tabulate
+
 
 class Notipy(ContextDecorator):
-    def __init__(self, task:str, email:str=None, recipients:List[str]=None, port:int=465, server:str=None, send_start_mail:bool=False):
-        """Create a new istance of Notipy.
-            task:str, name of the current task you are tracking execution of.
-            email:str, email from which to send the email. If None, it will be asked.
-            recipients:List[str]=None, list of mails to send it to. By default, only your own.
-            port:int, the port through which send the email.
-            server:str, the server of your email. By default extracted from the email.
-            send_start_mail:bool, whetever to send a mail also when the script starts. By default False.
-        """
+    _config_path = ".notipy.json"
+
+    def __init__(self):
+        """Create a new istance of Notipy."""
         super(Notipy, self).__init__()
-        self._task = task
-        self._email = input("Please insert your email: ") if email is None else email
-        self._recipients = [self._email] if recipients is None else recipients
-        self._port = port
-        self._server = "smtp.{server}".format(
-            server=".".join(self._email.split("@")[1].split(".")[-2:])
-        ) if server is None else server
-        self._send_start_mail = send_start_mail
-        self._password = getpass.getpass("Please insert your email password: ")
-        
-    def _notify(self, subject:str, txt_model:str, html_model:str):
-        server_ssl = SMTP_SSL(self._server, self._port)
-        server_ssl.login(self._email, self._password)
+        self._load_cache()
+        print("Let's setup your notipy!")
+        print("Hit enter to use the default values.")
+        self._config["email"] = self._get("email", self._validate_email)
+        self._password = getpass.getpass("Password: ")
+        self._config["task_name"] = self._get("task_name")
+        if "recipients" not in self._config:
+            self._config["recipients"] = self._config["email"]
+        self._config["recipients"] = self._get(
+            "recipients",
+            validator=self._validate_emails,
+            comment=", separated by a comma")
+        if "report_timeout" not in self._config:
+            self._config["report_timeout"] = 24
+        self._config["report_timeout"] = int(self._get(
+            "report_timeout",
+            validator=self._positive_int,
+            comment=", in hours"))
+        if "port" not in self._config:
+            self._config["port"] = 465
+        self._config["port"] = int(self._get(
+            "port",
+            validator=self._positive_int))
+        if "smtp_server" not in self._config:
+            self._config["smtp_server"] = "smtp.{server}".format(server=".".join(
+                self._config["email"].split("@")[1].split(".")[-2:])
+            )
+        self._config["smtp_server"] = self._get(
+            "smtp_server",
+            validator=self._validate_server)
+        self._store_cache()
+        self._report = None
+
+    def _get(self, parameter: str, validator: Callable = None, comment: str = "", default: str = ""):
+        default = " [{parameter}]".format(
+            parameter=self._config[parameter]
+        ) if parameter in self._config else ""
+        while True:
+            user_input = input("Please insert {parameter}{comment}{default}: ".format(
+                default=default,
+                parameter=parameter,
+                comment=comment)).strip()
+            if not user_input and default:
+                return self._config[parameter]
+            if validator is None or validator(user_input):
+                return user_input
+            print("The given {parameter} '{user_input}' is not valid.".format(
+                parameter=parameter, user_input=user_input))
+
+    def _validate_email(self, email:str):
+        return not email.endswith("gmail.com") and validate_email(email)        
+
+    def _validate_emails(self, emails: str):
+        return all([
+            validate_email(email) for email in emails.split(",")
+        ])
+
+    def _validate_server(self, server: str):
+        return domain(server) and self._is_server_reacheable(server)
+
+    def _is_server_reacheable(self, server: str)->bool:
+        try:
+            socket.gethostbyname(server)
+            return True
+        except socket.gaierror:
+            return False
+
+    def _positive_int(self, value: str):
+        return int(value) > 0
+
+    def _load_cache(self):
+        if os.path.exists(self._config_path):
+            with open(self._config_path, "r") as f:
+                self._config = json.load(f)
+        else:
+            self._config = {}
+
+    def _store_cache(self):
+        with open(self._config_path, "w") as f:
+            json.dump(self._config, f)
+
+    def _notify(self, subject: str, txt: str, html: str):
+        server_ssl = SMTP_SSL(
+            self._config["smtp_server"], self._config["port"])
+        server_ssl.login(self._config["email"], self._password)
         msg = MIMEMultipart('alternative')
         msg["Subject"] = subject
-        msg["To"] = ", ".join(self._recipients)
-        msg["From"] = self._email
-        msg.attach(MIMEText(self._build_model(txt_model), 'plain'))
-        msg.attach(MIMEText(self._build_model(html_model), 'html'))
+        msg["To"] = self._config["recipients"]
+        msg["From"] = self._config["email"]
+        msg.attach(MIMEText(txt, 'plain'))
+        msg.attach(MIMEText(html, 'html'))
         server_ssl.sendmail(msg["From"], msg["To"], msg.as_string())
         server_ssl.close()
 
@@ -48,48 +120,77 @@ class Notipy(ContextDecorator):
     def _pwd(self):
         return os.path.dirname(os.path.realpath(__file__))
 
-    def _load_model(self, path:str):
-        with open("{pwd}/models/{path}".format(pwd=self._pwd, path=path), "r") as f:
+    def _load_model(self, name: str, ext: str):
+        with open("{pwd}/models/{name}.{ext}".format(pwd=self._pwd, name=name, ext=ext), "r") as f:
             return f.read()
 
     @property
-    def _html_completion_model(self)->str:
-        return self._load_model("completion.html")
+    def _html(self)->str:
+        return self._load_model("basic", "html")
 
     @property
-    def _html_start_model(self)->str:
-        return self._load_model("start.html")
+    def _txt(self)->str:
+        return self._load_model("basic", "txt")
 
-    @property
-    def _txt_completion_model(self)->str:
-        return self._load_model("completion.txt")
+    def _json(self, name: str, ext: str)->Dict:
+        common = json.loads(self._load_model("common", "json"))
+        generic = json.loads(self._load_model(name, "json"))
+        extension = json.loads(self._load_model(ext, "json"))
+        return {**common, **generic, **extension}
 
-    @property
-    def _txt_start_model(self)->str:
-        return self._load_model("start.txt")
+    def _start(self):
+        subject, txt, html = self._build_models("start")
+        self._notify(subject, txt, html)
 
-    @property
+    def _completed(self):
+        subject, txt, html = self._build_models("completed")
+        self._notify(subject, txt, html)
+
+    def _send_report(self):
+        subject, txt, html = self._build_models("report")
+        self._notify(subject, txt, html)
+
     def _info(self)->Dict:
         return {
-            "TASK_NAME":self._task,
-            "SERVER_HOSTNAME":socket.gethostname(),
-            "USERNAME":getpass.getuser(),
-            "WORKING_PATH":os.getcwd(),
-            "START_TIME":humanize.naturaldelta(time.time() - self._start),
-            "COMPLETION_DATE":datetime.now().date(),
-            "SENDER":self._email
+            "hostname": socket.gethostname(),
+            "username": getpass.getuser(),
+            "pwd": os.getcwd(),
+            "elapsed": humanize.naturaldelta(time.time() - self._start_time),
+            "now": datetime.now().date(),
+            "report_html": "" if self._report is None else self._report.tail().to_html(),
+            "report_txt": "" if self._report is None else tabulate(self._report.tail(), tablefmt="pipe", headers="keys"),
+            **self._config
         }
 
-    def _build_model(self, model:str)->str:
-        for key, value in self._info.items():
-            model = model.replace(key, str(value))
-        return model
+    def _build_models(self, name: str)->Tuple[str, str, str]:
+        info = self._info()
+        models = []
+        for ext in ("txt", "html"):
+            data = self._json(name, ext)
+            model = self._load_model("basic", ext)
+            for k, v in data.items():
+                if isinstance(v, list):
+                    if ext == "txt":
+                        v = "\n".join(v)
+                    if ext == "html":
+                        v = "<br>".join(v)
+                model = model.replace(k, v.format(**info))
+            models.append(model)
+        return (data["model_title"], *models)
+
+    def add_report(self, df: pd.DataFrame):
+        self._report = df if self._report is None else pd.concat([
+            self._report, df
+        ])
+        if time.time() - self._last_report > self._config["report_timeout"]:
+            self._send_report()
 
     def __enter__(self):
-        self._start = time.time()
-        self._notify("Your task has started!", self._txt_start_model, self._html_start_model)
+        self._start_time = time.time()
+        self._last_report = time.time()
+        self._start()
         return self
 
     def __exit__(self, *exc):
-        self._notify("Your task has completed!", self._txt_completion_model, self._html_completion_model)
+        self._completed()
         return False
