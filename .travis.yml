@@ -1,0 +1,19 @@
+dist: trusty
+sudo: false
+git:
+  depth: false
+addons:
+  sonarcloud:
+    organization: "lucacappelletti94-github"
+    token:
+      secure: "GvT3HANmB0Cq5JA4u9MHgS3J+JJkab11RRHhFRTp0UkV35kcE0rCuMxF9XsIdhiQxJn0tSF3AnWRocpdCbozvVSlNkeNf67Nf7IeQyWWczTxaIUMklQwiiWIih+C2/fVf7JOEewPSswpVyA31DmWaZTD9GDDg8Z88dCeW1DXcJlXCdD6dRfJcUvtQQC6fl1/4OCVPVGXYDWIVLcltmhzf7mctV5aSTcV/NqwZH7vqIP6Xfpw0dXoeCnmGlN6dm2+R/O1pCutzjHvN801C1VCrvGQLkU6xGe2x8vwf4KhQMbhRsAHygFndVJFx/yf0FmjsnJEeOMG+Nc7oN3SJYkJ/lx8qQVM0p/uRvkEfaT0egWbJAqSt04k/0Safr0JvmJj96XIr5GbWbIGPCqgCc/2kK5I8z2GKELHbw9p156gmQlxwhfvuHZBH95heFqmzL+DA5ph9aYgwQ9cL4a7uXgooV735SI53jWRCwE9xgv0skNR2QQLr4YNjlm/onzk0jrgSH7apQmJTtn2mhcIkYy+ixcYdYcF6t4QVz7vqTTyE4XZGydM301YPRJeZ06j08H7fVCJIEbUWMw+HzlpJyfxh9ITsyqxKRatTWj9x/wSm3ShaZyNC+KKDtXgGgA8BeQkjDY8DR38IWg9Mwr8fFUNQvd8kXDTDwd1froayLZrrpc="
+language: python
+python:
+- '3.6'
+script:
+- sonar-scanner
+after_success:
+  - coveralls
+
+notifications:
+  email: false
