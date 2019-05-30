@@ -169,7 +169,8 @@ class Notipy(ContextDecorator):
                         v = "\n".join(v)
                     if ext == "html":
                         v = "<br>".join(v)
-                model = model.replace(k, v.format(**info))
+                v = v.format(**info)
+                model = model.replace(k, v)
                 data[k] = v
             models.append(model)
         return (data["model_title"], *models)
