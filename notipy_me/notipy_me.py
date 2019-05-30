@@ -13,8 +13,9 @@ import time
 import pandas as pd
 from validate_email import validate_email
 from validators import domain
+from environments_utils import is_stdout_enabled
 from tabulate import tabulate
-
+import sys
 
 class Notipy(ContextDecorator):
     _config_path = ".notipy.json"
@@ -22,38 +23,40 @@ class Notipy(ContextDecorator):
     def __init__(self):
         """Create a new istance of Notipy."""
         super(Notipy, self).__init__()
-        self._load_cache()
-        print("Let's setup your notipy!")
-        print("Hit enter to use the default values.")
-        self._config["email"] = self._get("email", self._validate_email)
-        self._password = getpass.getpass("Password: ")
-        self._config["task_name"] = self._get("task_name")
-        if "recipients" not in self._config:
-            self._config["recipients"] = self._config["email"]
-        self._config["recipients"] = self._get(
-            "recipients",
-            validator=self._validate_emails,
-            comment=", separated by a comma")
-        if "report_timeout" not in self._config:
-            self._config["report_timeout"] = 24
-        self._config["report_timeout"] = int(self._get(
-            "report_timeout",
-            validator=self._positive_int,
-            comment=", in hours"))
-        if "port" not in self._config:
-            self._config["port"] = 465
-        self._config["port"] = int(self._get(
-            "port",
-            validator=self._positive_int))
-        if "smtp_server" not in self._config:
-            self._config["smtp_server"] = "smtp.{server}".format(server=".".join(
-                self._config["email"].split("@")[1].split(".")[-2:])
-            )
-        self._config["smtp_server"] = self._get(
-            "smtp_server",
-            validator=self._validate_server)
-        self._store_cache()
-        self._report = None
+        self._enabled = is_stdout_enabled()
+        if self._enabled:
+            self._load_cache()
+            print("Let's setup your notipy!")
+            print("Hit enter to use the default values.")
+            self._config["email"] = self._get("email", self._validate_email)
+            self._password = getpass.getpass("Password: ")
+            self._config["task_name"] = self._get("task_name")
+            if "recipients" not in self._config:
+                self._config["recipients"] = self._config["email"]
+            self._config["recipients"] = self._get(
+                "recipients",
+                validator=self._validate_emails,
+                comment=", separated by a comma")
+            if "report_timeout" not in self._config:
+                self._config["report_timeout"] = 24
+            self._config["report_timeout"] = int(self._get(
+                "report_timeout",
+                validator=self._positive_int,
+                comment=", in hours"))
+            if "port" not in self._config:
+                self._config["port"] = 465
+            self._config["port"] = int(self._get(
+                "port",
+                validator=self._positive_int))
+            if "smtp_server" not in self._config:
+                self._config["smtp_server"] = "smtp.{server}".format(server=".".join(
+                    self._config["email"].split("@")[1].split(".")[-2:])
+                )
+            self._config["smtp_server"] = self._get(
+                "smtp_server",
+                validator=self._validate_server)
+            self._store_cache()
+            self._report = None
 
     def _get(self, parameter: str, validator: Callable = None, comment: str = "", default: str = ""):
         default = " [{parameter}]".format(
@@ -171,6 +174,8 @@ class Notipy(ContextDecorator):
         return (data["model_title"], *models)
 
     def add_report(self, df: pd.DataFrame):
+        if not self._enabled:
+            return
         self._report = df if self._report is None else pd.concat([
             self._report, df
         ])
@@ -178,11 +183,13 @@ class Notipy(ContextDecorator):
             self._send_report()
 
     def __enter__(self):
-        self._start_time = time.time()
-        self._last_report = time.time()
-        self._start()
+        if self._enabled:
+            self._start_time = time.time()
+            self._last_report = time.time()
+            self._start()
         return self
 
     def __exit__(self, *exc):
+        if not self._enabled:
+            return
         self._completed()
-        return False
