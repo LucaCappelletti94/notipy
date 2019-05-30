@@ -102,7 +102,7 @@ class Notipy(ContextDecorator):
 
     def _store_cache(self):
         with open(self._config_path, "w") as f:
-            json.dump(self._config, f)
+            json.dump(self._config, f, indent=4)
 
     def _notify(self, subject: str, txt: str, html: str):
         server_ssl = SMTP_SSL(
@@ -124,7 +124,7 @@ class Notipy(ContextDecorator):
     def _load_model(self, name: str, ext: str):
         with open("{pwd}/models/{name}.{ext}".format(pwd=self._pwd, name=name, ext=ext), "r") as f:
             return f.read()
-            
+
     def _json(self, name: str, ext: str)->Dict:
         common = json.loads(self._load_model("common", "json"))
         generic = json.loads(self._load_model(name, "json"))
