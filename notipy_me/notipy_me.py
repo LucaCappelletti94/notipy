@@ -182,6 +182,7 @@ class Notipy(ContextDecorator):
             self._report, df
         ])
         if time.time() - self._last_report > self._config["report_timeout"]*60*60:
+            self._last_report = time.time()
             self._send_report()
 
     def __enter__(self):
