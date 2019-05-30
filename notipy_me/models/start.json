@@ -1,10 +1,10 @@
 {
-    "model_title":"Your task has started!",
-    "model_subtitle":"We would like you to know that your task called {task_name} has started!",
+    "model_title":"[NOTIPY ME] {task_name} started!",
+    "model_subtitle":"Your task {task_name} has started!",
     "the_wheres":[
         "The task is on {hostname}.",
-        "The user logged is {username}.",
-        "The working path is {pwd}."
+        "The user is {username}.",
+        "The path is {pwd}."
     ],
     "the_whens":[
         "The task started on {now}."
