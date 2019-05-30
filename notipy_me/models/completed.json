@@ -1,5 +1,6 @@
 {
-    "model_title":"[NOTIPY ME] {task_name} completed!",
+    "model_subject":"[NOTIPY ME] {task_name} completed!",
+    "model_title":"Task completed!",
     "model_subtitle":"Your task {task_name} has completed!",
     "the_wheres":[
         "The task was on {hostname}.",

@@ -1,5 +1,6 @@
 {
-    "model_title":"[NOTIPY ME] {task_name} report!",
+    "model_subject":"[NOTIPY ME] {task_name} report!",
+    "model_title":"New task report!",
     "model_subtitle":"Here's what {task_name} is doing!",
     "the_wheres":[
         "The task is on {hostname}.",

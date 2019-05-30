@@ -173,7 +173,7 @@ class Notipy(ContextDecorator):
                 model = model.replace(k, v)
                 data[k] = v
             models.append(model)
-        return (data["model_title"], *models)
+        return (data["model_subject"], *models)
 
     def add_report(self, df: pd.DataFrame):
         if not self._enabled:
