@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: notipy-me
-Version: 1.2.5
+Version: 1.2.6
 Summary: A simple python package to send you and any other receiver an email when a portion of code is done running.
 Home-page: https://github.com/LucaCappelletti94/notipy_me
 Author: Luca Cappelletti
