@@ -13,8 +13,6 @@ python:
 install:
   - pip install .[test]
 script:
-- coverage report
-- coverage xml
 - sonar-scanner
 after_success:
   - coveralls
