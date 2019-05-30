@@ -64,9 +64,8 @@ class Notipy(ContextDecorator):
                 default=default,
                 parameter=parameter,
                 comment=comment)).strip()
-            if not user_input and default:
-                if validator is None or validator(self._config[parameter]):
-                    return self._config[parameter]
+            if not user_input and default and (validator is None or validator(self._config[parameter])):
+                return self._config[parameter]
             if validator is None or validator(user_input):
                 return user_input
             print("The given {parameter} '{user_input}' is not valid.".format(
