@@ -24,7 +24,7 @@ Usage as decorator
 
     from notipy_me import Notipy
 
-    @Notipy("Long running script", send_start_mail=True)
+    @Notipy
     def my_long_running_script():
         ...
 
@@ -35,32 +35,31 @@ Usage as context
 
     from notipy_me import Notipy
 
-    with Notipy("Long running script", send_start_mail=True):
+    with Notipy() as NP:
         my_long_running_script()
 
-Setting the mail password
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The script will ask you to insert the email, if you haven't specified one, and its password, and then you'll be set to go:
-
-.. code:: bash
-
-    Please insert your email password:
-
-Some additional settings
+Form example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-All the available settings are the following:
+When you run the script notipy will ask you to enter your email, password etc... it will store into a cache file called `.notipy.json` every setting except for the password.
 
-.. code:: python
+The following example is from after having run the test once, so it loads everything except for the password from the cache:
 
-    Notipy(
-        task="task name", # name of the task you are executing.
-        email="my_mail@myserver.com", # email from which send the emails.
-        recipients=None, # List of recepients.
-        port=465, # Server port, default one for using SSL.
-        server=None, # SMTP server.
-        send_start_mail=False # Whetever to send or not also a mail when the task starts.
-    )
+.. code:: plain
+
+    Let's setup your notipy!
+    Hit enter to use the default values.
+    Please insert email [luca.cappelletti@my.email.it]: 
+    Password: 
+    Please insert task_name [Testing Notipy]: 
+    Please insert recipients, separated by a comma [luca.cappelletti@my.email.it]: 
+    Please insert report_timeout_unit, ('h', 'm', 's') [s]: 
+    Please insert report_timeout, in seconds [120]: 
+    Please insert port [465]: 
+    Please insert smtp_server [smtp.email.it]:     
+
+Integration with travis
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+By default, when used on a system with no stdout to ask for input, notipy turns itself off.
 
 Preview
 -------------------------------
