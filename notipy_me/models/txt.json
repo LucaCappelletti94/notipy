@@ -1,3 +1,4 @@
 {
-    "report_table":"{report_txt}"
+    "report_table":"{report_txt}",
+    "interrupt_report":"{interrupt_txt}"
 }

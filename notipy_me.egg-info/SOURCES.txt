@@ -14,6 +14,7 @@ notipy_me/models/basic.txt
 notipy_me/models/common.json
 notipy_me/models/completed.json
 notipy_me/models/html.json
+notipy_me/models/interruption.json
 notipy_me/models/report.json
 notipy_me/models/start.json
 notipy_me/models/txt.json

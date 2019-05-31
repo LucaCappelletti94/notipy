@@ -16,6 +16,7 @@ from validators import domain
 from environments_utils import is_stdout_enabled
 from tabulate import tabulate
 import sys
+from traceback import format_tb
 
 class Notipy(ContextDecorator):
     _config_path = ".notipy.json"
@@ -37,12 +38,28 @@ class Notipy(ContextDecorator):
                 "recipients",
                 validator=self._validate_emails,
                 comment=", separated by a comma")
+            timeouts = {
+                "h":24,
+                "m":30,
+                "s":120
+            }
+            if "report_timeout_unit" not in self._config:
+                self._config["report_timeout_unit"] = "h"
+            self._config["report_timeout_unit"] = self._get(
+                "report_timeout_unit",
+                validator=lambda x: x in timeouts,
+                comment=", {timeouts}".format(timeouts=tuple(timeouts.keys())))
             if "report_timeout" not in self._config:
-                self._config["report_timeout"] = 24
+                self._config["report_timeout"] = timeouts[self._config["report_timeout_unit"]]
+            unit = {
+                "h":"hours",
+                "m":"minutes",
+                "s":"seconds"
+            }[self._config["report_timeout_unit"]]
             self._config["report_timeout"] = int(self._get(
                 "report_timeout",
                 validator=self._positive_int,
-                comment=", in hours"))
+                comment=", in {unit}".format(unit=unit)))
             if "port" not in self._config:
                 self._config["port"] = 465
             self._config["port"] = int(self._get(
@@ -56,7 +73,7 @@ class Notipy(ContextDecorator):
                 "smtp_server",
                 validator=self._validate_server)
             self._store_cache()
-            self._report = None
+            self._report = self._interrupt_txt = self._interrupt_html = None
 
     def _get(self, parameter: str, validator: Callable = None, comment: str = "", default: str = ""):
         default = " [{parameter}]".format(
@@ -141,9 +158,17 @@ class Notipy(ContextDecorator):
         subject, txt, html = self._build_models("completed")
         self._notify(subject, txt, html)
 
+    def _interruption(self):
+        subject, txt, html = self._build_models("interruption")
+        self._notify(subject, txt, html)
+
     def _send_report(self):
         subject, txt, html = self._build_models("report")
         self._notify(subject, txt, html)
+
+    def _format_traceback(self, tb, value):
+        self._interrupt_txt = "\n".join(format_tb(tb)) + str(value)
+        self._interrupt_html = self._interrupt_txt.replace("\n", "<br>")
 
     def _info(self)->Dict:
         return {
@@ -152,6 +177,8 @@ class Notipy(ContextDecorator):
             "pwd": os.getcwd(),
             "elapsed": humanize.naturaldelta(time.time() - self._start_time),
             "now": datetime.now().date(),
+            "interrupt_txt": "" if self._interrupt_txt is None else self._interrupt_txt,
+            "interrupt_html": "" if self._interrupt_html is None else self._interrupt_html,
             "report_html": "" if self._report is None else self._report.tail().to_html(),
             "report_txt": "" if self._report is None else tabulate(self._report.tail(), tablefmt="pipe", headers="keys"),
             **self._config
@@ -192,7 +219,11 @@ class Notipy(ContextDecorator):
             self._start()
         return self
 
-    def __exit__(self, *exc):
+    def __exit__(self, exc_type, exc_val, traceback):
         if not self._enabled:
             return
-        self._completed()
+        if exc_type is not None and exc_type is not KeyboardInterrupt:
+            self._format_traceback(traceback, exc_val)
+            self._interruption()
+        elif exc_type is None:
+            self._completed()
