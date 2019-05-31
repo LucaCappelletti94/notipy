@@ -44,7 +44,7 @@ When you run the script notipy will ask you to enter your email, password etc...
 
 The following example is from after having run the test once, so it loads everything except for the password from the cache:
 
-.. code:: plain
+.. code:: bash
 
     Let's setup your notipy!
     Hit enter to use the default values.
@@ -56,6 +56,7 @@ The following example is from after having run the test once, so it loads everyt
     Please insert report_timeout, in seconds [120]: 
     Please insert port [465]: 
     Please insert smtp_server [smtp.email.it]:     
+
 
 Integration with travis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
