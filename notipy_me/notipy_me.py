@@ -17,6 +17,7 @@ from environments_utils import is_stdout_enabled
 from tabulate import tabulate
 import sys
 from traceback import format_tb
+from auto_tqdm import remaining_time
 
 class Notipy(ContextDecorator):
     _config_path = ".notipy.json"
@@ -171,11 +172,13 @@ class Notipy(ContextDecorator):
         self._interrupt_html = self._interrupt_txt.replace("\n", "<br>")
 
     def _info(self)->Dict:
+        remaining = remaining_time()
         return {
             "hostname": socket.gethostname(),
             "username": getpass.getuser(),
             "pwd": os.getcwd(),
             "elapsed": humanize.naturaldelta(time.time() - self._start_time),
+            "remaining": "It remains {remaining}".format(remaining=remaining) if remaining else "",
             "now": datetime.now().date(),
             "interrupt_txt": "" if self._interrupt_txt is None else self._interrupt_txt,
             "interrupt_html": "" if self._interrupt_html is None else self._interrupt_html,
@@ -208,7 +211,11 @@ class Notipy(ContextDecorator):
         self._report = df if self._report is None else pd.concat([
             self._report, df
         ])
-        if time.time() - self._last_report > self._config["report_timeout"]*60*60:
+        if time.time() - self._last_report > self._config["report_timeout"]*{
+            "h":60*60,
+            "m":60,
+            "s":1
+        }[self._config["report_timeout_unit"]]:
             self._last_report = time.time()
             self._send_report()
 

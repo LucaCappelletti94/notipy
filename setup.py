@@ -78,7 +78,7 @@ setup(
     # simple. Or you can use find_packages().
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
 
-    install_requires=["humanize", "validate_email", "tabulate", "environments_utils", "validators"],
+    install_requires=["humanize", "validate_email", "tabulate", "environments_utils", "validators", "auto_tqdm"],
     tests_require=test_deps,
     extras_require=extras,
 )
