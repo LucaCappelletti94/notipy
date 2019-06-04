@@ -3,7 +3,6 @@ validate_email
 tabulate
 environments_utils
 validators
-auto_tqdm
 
 [test]
 pytest
