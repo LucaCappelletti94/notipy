@@ -1,0 +1,11 @@
+{
+    "always_use_default": "yes",
+    "email": "luca.cappelletti@studenti.unimi.it",
+    "start_email": "no",
+    "task name": "Testing notipy",
+    "recipients": "luca.cappelletti@studenti.unimi.it",
+    "report_timeout_unit": "seconds",
+    "report_timeout": "1",
+    "port": 465,
+    "smtp_server": "smtp.unimi.it"
+}

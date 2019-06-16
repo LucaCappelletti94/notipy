@@ -1,5 +1,5 @@
 {
-    "model_subject":"[NOTIPY ME] {task_name} interrupted!",
+    "model_subject":"[EXCEPTION] {task_name} interrupted!",
     "model_title":"Task interrupted!",
     "model_subtitle":"Your task {task_name} was stopped!",
     "the_wheres":[
