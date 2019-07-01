@@ -45,9 +45,15 @@ Usage as context
 .. code:: python
 
     from notipy_me import Notipy
+    from time import sleep
+    import pandas as pd
 
-    with Notipy() as NP:
-        my_long_running_script()
+    with Notipy() as ntp:
+        for i in range(1000):
+            ntp.add_report(pd.DataFrame({
+                "test":[2]
+            }))
+            sleep(1)
 
 Form example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
