@@ -17,7 +17,7 @@ from tabulate import tabulate
 from validate_email import validate_email
 import sys
 from traceback import format_tb
-from userinput import userinput, set_validator, start
+from userinput import userinput, set_validator, start, clear
 
 
 class Notipy(ContextDecorator):
@@ -31,21 +31,25 @@ class Notipy(ContextDecorator):
     @start
     def _setup(self):
         self._enabled = True
+        clear()
         print("Let's setup your notipy!")
-        print("Hit enter to use the default values.")
         self._always_use_default = userinput("always_use_default",
                                      label="Should I always use the defaults?",
                                      default="no",
                                      sanitizer="human_bool",
                                      validator=set_validator(["yes", "no"]))
+        clear()
         self._email = userinput("email", validator="email", always_use_default=self._always_use_default)
         self._password = getpass.getpass("Password: ")
+        clear()
         self._send_start_email = userinput("start_email",
                                      label="Should I send a start email too?",
                                      default="yes",
                                      sanitizer="human_bool",
                                      validator=set_validator(["yes", "no"]))
+        clear()
         self._task_name = userinput("task name", validator="non_empty", always_use_default=self._always_use_default)
+        clear()
         self._recipients = userinput("recipients", default=self._email,
                                      label="Please insert {name}, separated by a comma",
                                      validator=lambda x: all([
@@ -53,6 +57,7 @@ class Notipy(ContextDecorator):
                                      ]),
                                      always_use_default=self._always_use_default
                                      ).split(",")
+        clear()
         timeouts = {
             "hours": 24,
             "minutes": 30,
@@ -67,6 +72,7 @@ class Notipy(ContextDecorator):
             validator=set_validator(timeouts.keys()),
             always_use_default=self._always_use_default
         )
+        clear()
         self._report_timeout = int(userinput(
             "report_timeout",
             label="Please insert {{name}} in {unit}".format(
@@ -76,13 +82,14 @@ class Notipy(ContextDecorator):
             validator="positive_integer",
             always_use_default=self._always_use_default
         ))
+        clear()
         self._port = int(userinput(
             "port",
             default=465,
             validator="positive_integer",
             always_use_default=self._always_use_default
         ))
-
+        clear()
         self._smtp_server = userinput(
             "smtp_server",
             default="smtp.{server}".format(server=".".join(
@@ -90,6 +97,7 @@ class Notipy(ContextDecorator):
             validator="hostname",
             always_use_default=self._always_use_default
         )
+        clear()
 
     def _notify(self, subject: str, txt: str, html: str):
         server_ssl = SMTP_SSL(self._smtp_server, self._port)

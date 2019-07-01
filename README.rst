@@ -68,23 +68,6 @@ The following example is from after having run the test once, so it loads everyt
     Please insert port [465]: 
     Please insert smtp_server [smtp.email.it]:     
 
-
-Integration with travis
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-By default, when used on a system with no stdout to ask for input, notipy turns itself off.
-
-Preview
--------------------------------
-You will receive mails such as the following (in both images the server name and email server has been deleted):
-
-|started| |completed|
-
-.. |started| image:: https://github.com/LucaCappelletti94/notipy_me/blob/master/started.png?raw=true
-   :width: 45%
-
-.. |completed| image:: https://github.com/LucaCappelletti94/notipy_me/blob/master/completed.png?raw=true
-   :width: 45%
-
 Known issues
 ------------
 
