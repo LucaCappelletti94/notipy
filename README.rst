@@ -51,22 +51,9 @@ Usage as context
 
 Form example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-When you run the script notipy will ask you to enter your email, password etc... it will store into a cache file called `.notipy.json` every setting except for the password.
+When you run the script notipy will ask you to enter your email, password etc... it will store into a cache file called `.notipy` every setting except for the password.
 
-The following example is from after having run the test once, so it loads everything except for the password from the cache:
-
-.. code:: bash
-
-    Let's setup your notipy!
-    Hit enter to use the default values.
-    Please insert email [luca.cappelletti@my.email.it]: 
-    Password: 
-    Please insert task_name [Testing Notipy]: 
-    Please insert recipients, separated by a comma [luca.cappelletti@my.email.it]: 
-    Please insert report_timeout_unit, ('h', 'm', 's') [s]: 
-    Please insert report_timeout, in seconds [120]: 
-    Please insert port [465]: 
-    Please insert smtp_server [smtp.email.it]:     
+|usage|
 
 Known issues
 ------------
@@ -90,3 +77,4 @@ other mail providers it works fine.
     :target: https://badge.fury.io/py/notipy_me
 
 .. |preview| image:: https://github.com/LucaCappelletti94/notipy_me/blob/master/preview.png?raw=true
+.. |usage| image:: https://github.com/LucaCappelletti94/notipy_me/blob/master/notipy.gif?raw=true

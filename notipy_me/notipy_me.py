@@ -37,21 +37,24 @@ class Notipy(ContextDecorator):
                                      label="Should I always use the defaults?",
                                      default="no",
                                      sanitizer="human_bool",
+                                     cache_path=".notipy",
                                      validator=set_validator(["yes", "no"]))
         clear()
-        self._email = userinput("email", validator="email", always_use_default=self._always_use_default)
+        self._email = userinput("email", validator="email", cache_path=".notipy", always_use_default=self._always_use_default)
         self._password = getpass.getpass("Password: ")
         clear()
         self._send_start_email = userinput("start_email",
                                      label="Should I send a start email too?",
                                      default="yes",
                                      sanitizer="human_bool",
+                                     cache_path=".notipy",
                                      validator=set_validator(["yes", "no"]))
         clear()
-        self._task_name = userinput("task name", validator="non_empty", always_use_default=self._always_use_default)
+        self._task_name = userinput("task name", validator="non_empty", cache_path=".notipy", always_use_default=self._always_use_default)
         clear()
         self._recipients = userinput("recipients", default=self._email,
                                      label="Please insert {name}, separated by a comma",
+                                     cache_path=".notipy",
                                      validator=lambda x: all([
                                          validate_email(email) for email in x.split(",")
                                      ]),
@@ -68,6 +71,7 @@ class Notipy(ContextDecorator):
             label="Please insert {{name}}, choosing from {choices}".format(
                 choices=", ".join(timeouts.keys())
             ),
+            cache_path=".notipy",
             default="hours",
             validator=set_validator(timeouts.keys()),
             always_use_default=self._always_use_default
@@ -78,6 +82,7 @@ class Notipy(ContextDecorator):
             label="Please insert {{name}} in {unit}".format(
                 unit=self._report_timeout_unit
             ),
+            cache_path=".notipy",
             default=timeouts[self._report_timeout_unit],
             validator="positive_integer",
             always_use_default=self._always_use_default
@@ -87,6 +92,7 @@ class Notipy(ContextDecorator):
             "port",
             default=465,
             validator="positive_integer",
+            cache_path=".notipy",
             always_use_default=self._always_use_default
         ))
         clear()
@@ -95,6 +101,7 @@ class Notipy(ContextDecorator):
             default="smtp.{server}".format(server=".".join(
                 self._email.split("@")[1].split(".")[-2:])),
             validator="hostname",
+            cache_path=".notipy",
             always_use_default=self._always_use_default
         )
         clear()
