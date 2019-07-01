@@ -13,6 +13,17 @@ Just run:
 
    pip install notipy_me
 
+Preview
+--------------------------
+There are 4 emails types: 
+
+- start: notify the recipients that the task has started.
+- report: send out the logged reports after a given interval.
+- exception: notify the recipients that the task has been interrupted.
+- completed: notify the recipients that the task has completed.
+
+|preview|
+
 Usage example
 -------------
 A basic usage example can be the following:
@@ -94,5 +105,5 @@ other mail providers it works fine.
 
 .. |pip| image:: https://badge.fury.io/py/notipy_me.svg
     :target: https://badge.fury.io/py/notipy_me
-    
 
+.. |preview| image:: https://github.com/LucaCappelletti94/notipy_me/blob/master/preview.png?raw=true
