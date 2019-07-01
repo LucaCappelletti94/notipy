@@ -1,7 +1,7 @@
 {
-    "always_use_default": "yes",
+    "always_use_default": "no",
     "email": "luca.cappelletti@studenti.unimi.it",
-    "start_email": "no",
+    "start_email": "yes",
     "task name": "Testing notipy",
     "recipients": "luca.cappelletti@studenti.unimi.it",
     "report_timeout_unit": "seconds",
