@@ -79,8 +79,13 @@ other mail providers it works fine.
 .. |sonar_coverage| image:: https://sonarcloud.io/api/project_badges/measure?project=LucaCappelletti94_notipy_me&metric=coverage
     :target: https://sonarcloud.io/dashboard/index/LucaCappelletti94_notipy_me
 
-.. |pip| image:: https://badge.fury.io/py/notipy_me.svg
+.. |pip| image:: https://badge.fury.io/py/notipy-me.svg
     :target: https://badge.fury.io/py/notipy_me
+
+.. |downloads| image:: https://pepy.tech/badge/notipy-me
+    :target: https://pepy.tech/badge/notipy-me
+    :alt: Pypi total project downloads 
+
 
 .. |preview| image:: https://github.com/LucaCappelletti94/notipy_me/blob/master/preview.png?raw=true
 .. |usage| image:: https://github.com/LucaCappelletti94/notipy_me/blob/master/notipy.gif?raw=true
