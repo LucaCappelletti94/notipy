@@ -1,6 +1,6 @@
 Notipy Me
 =========
-|sonar_quality| |sonar_maintainability| |sonar_coverage| |pip|
+|sonar_quality| |sonar_maintainability| |sonar_coverage| |pip| |downloads|
 
 A simple python package to send you and any other receiver an email when a portion of code is done running.
 
