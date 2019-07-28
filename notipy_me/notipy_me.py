@@ -38,7 +38,7 @@ class Notipy(ContextDecorator):
                                      default="no",
                                      sanitizer="human_bool",
                                      cache_path=".notipy",
-                                     validator=set_validator(["yes", "no"]))
+                                     validator="human_bool")
         clear()
         self._email = userinput("email", validator="email", cache_path=".notipy", always_use_default=self._always_use_default)
         self._password = getpass.getpass("Password: ")
@@ -48,7 +48,7 @@ class Notipy(ContextDecorator):
                                      default="yes",
                                      sanitizer="human_bool",
                                      cache_path=".notipy",
-                                     validator=set_validator(["yes", "no"]))
+                                     validator="human_bool")
         clear()
         self._task_name = userinput("task name", validator="non_empty", cache_path=".notipy", always_use_default=self._always_use_default)
         clear()

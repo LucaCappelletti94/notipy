@@ -6,8 +6,7 @@
     "model_subtitle":"Your task {task_name} has started!",
     "the_wheres":[
         "The task is on {hostname}.",
-        "The user is {username}.",
-        "The path is {pwd}."
+        "The user is {username}."
     ],
     "the_whens":[
         "The task started on {now}."
