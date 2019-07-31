@@ -17,7 +17,7 @@ from tabulate import tabulate
 from validate_email import validate_email
 import sys
 from traceback import format_tb
-from userinput import userinput, set_validator, start, clear
+from userinput import userinput, set_validator, can_start, clear
 
 
 class Notipy(ContextDecorator):
@@ -25,10 +25,10 @@ class Notipy(ContextDecorator):
         """Create a new istance of Notipy."""
         super(Notipy, self).__init__()
         self._enabled = False
-        self._setup()
+        if can_start("Press CTRL+C to start notipy within {i} seconds..."):
+            self._setup()
         self._report = self._interrupt_txt = self._interrupt_html = None
 
-    @start
     def _setup(self):
         self._enabled = True
         clear()
