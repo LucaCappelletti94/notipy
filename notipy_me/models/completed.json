@@ -6,8 +6,7 @@
     "model_subtitle":"Your task {task_name} has completed!",
     "the_wheres":[
         "The task was on {hostname}.",
-        "The user was {username}.",
-        "The path was {pwd}."
+        "The user was {username}."
     ],
     "the_whens":[
         "The task completed on {now}.",
