@@ -25,7 +25,7 @@ class Notipy(ContextDecorator):
         """Create a new istance of Notipy."""
         super(Notipy, self).__init__()
         self._enabled = False
-        if can_start("Press CTRL+C to start notipy within {i} seconds..."):
+        if os.path.exists(".password") or can_start("Press CTRL+C to start notipy within {i} seconds..."):
             self._setup()
         self._report = self._interrupt_txt = self._interrupt_html = None
 
@@ -33,34 +33,51 @@ class Notipy(ContextDecorator):
         self._enabled = True
         clear()
         print("Let's setup your notipy!")
-        self._always_use_default = userinput("always_use_default",
-                                     label="Should I always use the defaults?",
-                                     default="no",
-                                     sanitizer="human_bool",
-                                     cache_path=".notipy",
-                                     validator="human_bool")
-        clear()
-        self._email = userinput("email", validator="email", cache_path=".notipy", always_use_default=self._always_use_default)
-        self._password = getpass.getpass("Password: ")
-        clear()
-        self._send_start_email = userinput("start_email",
-                                     label="Should I send a start email too?",
-                                     default="yes",
-                                     sanitizer="human_bool",
-                                     cache_path=".notipy",
-                                     validator="human_bool")
-        clear()
-        self._task_name = userinput("task name", validator="non_empty", cache_path=".notipy", always_use_default=self._always_use_default)
-        clear()
-        self._recipients = userinput("recipients", default=self._email,
-                                     label="Please insert {name}, separated by a comma",
-                                     cache_path=".notipy",
-                                     validator=lambda x: all([
-                                         validate_email(email) for email in x.split(",")
-                                     ]),
-                                     always_use_default=self._always_use_default
-                                     ).split(",")
-        clear()
+        self._always_use_default = userinput(
+            "always_use_default",
+            label="Should I always use the defaults?",
+            default="no",
+            sanitizer="human_bool",
+            cache_path=".password",
+            validator="human_bool",
+            auto_clear=True,
+            always_use_default=os.path.exists(".password")
+        )
+        self._email = userinput("email", validator="email", cache_path=".notipy",
+                                always_use_default=self._always_use_default)
+        self._password = userinput(
+            "password",
+            cache_path=".password",
+            delete_cache=True,
+            auto_clear=True,
+            always_use_default=self._always_use_default
+        )
+        self._send_start_email = userinput(
+            "start_email",
+            label="Should I send a start email too?",
+            default="yes",
+            sanitizer="human_bool",
+            cache_path=".notipy",
+            validator="human_bool",
+            auto_clear=True
+        )
+        self._task_name = userinput(
+            "task name",
+            validator="non_empty",
+            cache_path=".notipy",
+            always_use_default=self._always_use_default,
+            auto_clear=True
+        )
+        self._recipients = userinput(
+            "recipients", default=self._email,
+            label="Please insert {name}, separated by a comma",
+            cache_path=".notipy",
+            validator=lambda x: all([
+                validate_email(email) for email in x.split(",")
+            ]),
+            always_use_default=self._always_use_default,
+            auto_clear=True
+        ).split(",")
         timeouts = {
             "hours": 24,
             "minutes": 30,
@@ -74,9 +91,9 @@ class Notipy(ContextDecorator):
             cache_path=".notipy",
             default="hours",
             validator=set_validator(timeouts.keys()),
-            always_use_default=self._always_use_default
+            always_use_default=self._always_use_default,
+            auto_clear=True
         )
-        clear()
         self._report_timeout = int(userinput(
             "report_timeout",
             label="Please insert {{name}} in {unit}".format(
@@ -85,26 +102,26 @@ class Notipy(ContextDecorator):
             cache_path=".notipy",
             default=timeouts[self._report_timeout_unit],
             validator="positive_integer",
-            always_use_default=self._always_use_default
+            always_use_default=self._always_use_default,
+            auto_clear=True
         ))
-        clear()
         self._port = int(userinput(
             "port",
             default=465,
             validator="positive_integer",
             cache_path=".notipy",
-            always_use_default=self._always_use_default
+            always_use_default=self._always_use_default,
+            auto_clear=True
         ))
-        clear()
         self._smtp_server = userinput(
             "smtp_server",
             default="smtp.{server}".format(server=".".join(
                 self._email.split("@")[1].split(".")[-2:])),
             validator="hostname",
             cache_path=".notipy",
-            always_use_default=self._always_use_default
+            always_use_default=self._always_use_default,
+            auto_clear=True
         )
-        clear()
 
     def _notify(self, subject: str, txt: str, html: str):
         server_ssl = SMTP_SSL(self._smtp_server, self._port)
@@ -126,33 +143,29 @@ class Notipy(ContextDecorator):
         with open("{pwd}/models/{name}.{ext}".format(pwd=self._pwd, name=name, ext=ext), "r") as f:
             return f.read()
 
-    def _json(self, name: str, ext: str)->Dict:
+    def _json(self, name: str, ext: str) -> Dict:
         common = json.loads(self._load_model("common", "json"))
         generic = json.loads(self._load_model(name, "json"))
         extension = json.loads(self._load_model(ext, "json"))
         return {**common, **generic, **extension}
 
     def _start(self):
-        subject, txt, html = self._build_models("start")
-        self._notify(subject, txt, html)
+        self._notify(*self._build_models("start"))
 
     def _completed(self):
-        subject, txt, html = self._build_models("completed")
-        self._notify(subject, txt, html)
+        self._notify(*self._build_models("completed"))
 
     def _interruption(self):
-        subject, txt, html = self._build_models("interruption")
-        self._notify(subject, txt, html)
+        self._notify(*self._build_models("interruption"))
 
     def _send_report(self):
-        subject, txt, html = self._build_models("report")
-        self._notify(subject, txt, html)
+        self._notify(*self._build_models("report"))
 
     def _format_traceback(self, tb, value):
         self._interrupt_txt = "\n".join(format_tb(tb)) + str(value)
         self._interrupt_html = self._interrupt_txt.replace("\n", "<br>")
 
-    def _info(self)->Dict:
+    def _info(self) -> Dict:
         return {
             "hostname": socket.gethostname(),
             "username": getpass.getuser(),
@@ -167,7 +180,7 @@ class Notipy(ContextDecorator):
             "task_name": self._task_name
         }
 
-    def _build_models(self, name: str)->Tuple[str, str, str]:
+    def _build_models(self, name: str) -> Tuple[str, str, str]:
         info = self._info()
         models = []
         for ext in ("txt", "html"):
