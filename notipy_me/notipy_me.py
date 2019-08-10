@@ -50,7 +50,7 @@ class Notipy(ContextDecorator):
             cache_path=".password",
             delete_cache=True,
             auto_clear=True,
-            always_use_default=self._always_use_default
+            always_use_default=os.path.exists(".password")
         )
         self._send_start_email = userinput(
             "start_email",
