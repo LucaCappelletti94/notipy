@@ -59,6 +59,7 @@ class Notipy(ContextDecorator):
             sanitizer="human_bool",
             cache_path=".notipy",
             validator="human_bool",
+            always_use_default=self._always_use_default,
             auto_clear=True
         )
         self._task_name = userinput(
