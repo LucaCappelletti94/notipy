@@ -21,27 +21,28 @@ from userinput import userinput, set_validator, can_start, clear
 
 
 class Notipy(ContextDecorator):
-    def __init__(self):
+    __SINGLE_RUN__ = ".single_run"
+    def __init__(self, setup_single_run:bool=False):
         """Create a new istance of Notipy."""
         super(Notipy, self).__init__()
         self._enabled = False
-        if os.path.exists(".password") or can_start("Press CTRL+C to start notipy within {i} seconds..."):
-            self._setup()
+        if os.path.exists(self.__SINGLE_RUN__) or can_start("Press CTRL+C to start notipy within {i} seconds..."):
+            self._setup(setup_single_run)
         self._report = self._interrupt_txt = self._interrupt_html = None
 
     def _setup(self, setup_single_run:bool=False):
         self._enabled = True
         clear()
         print("Let's setup your notipy!")
-        self._always_use_default = userinput(
+        self._always_use_default = setup_single_run or userinput(
             "always_use_default",
             label="Should I always use the defaults?",
             default="no",
             sanitizer="human_bool",
-            cache_path=".single_run",
+            cache_path=self.__SINGLE_RUN__,
             validator="human_bool",
             auto_clear=True,
-            always_use_default=os.path.exists(".single_run")
+            always_use_default=os.path.exists(self.__SINGLE_RUN__)
         )
 
         delete_password = userinput(
@@ -49,7 +50,7 @@ class Notipy(ContextDecorator):
             label="Should I delete your password after usage?",
             default="yes",
             sanitizer="human_bool",
-            cache_path=".single_run",
+            cache_path=self.__SINGLE_RUN__,
             validator="human_bool",
             auto_clear=True,
             always_use_default=not setup_single_run
@@ -64,12 +65,12 @@ class Notipy(ContextDecorator):
         
         self._password = userinput(
             "password",
-            cache_path=".single_run",
+            cache_path=self.__SINGLE_RUN__,
             validator="non_empty",
             hidden=True,
             delete_cache=delete_password,
             auto_clear=True,
-            always_use_default=os.path.exists(".single_run")
+            always_use_default=os.path.exists(self.__SINGLE_RUN__)
         )
         self._send_start_email = userinput(
             "start_email",
