@@ -43,18 +43,31 @@ class Notipy(ContextDecorator):
             auto_clear=True,
             always_use_default=os.path.exists(".single_run")
         )
+
+        delete_password = userinput(
+            "delete_password",
+            label="Should I delete your password after usage?",
+            default="yes",
+            sanitizer="human_bool",
+            cache_path=".single_run",
+            validator="human_bool",
+            auto_clear=True,
+            always_use_default=not setup_single_run
+        )
+
         self._email = userinput(
             "email",
             validator="email",
             cache_path=".notipy",
             always_use_default=self._always_use_default
         )
+        
         self._password = userinput(
             "password",
             cache_path=".single_run",
             validator="non_empty",
             hidden=True,
-            delete_cache=True,
+            delete_cache=delete_password,
             auto_clear=True,
             always_use_default=os.path.exists(".single_run")
         )
