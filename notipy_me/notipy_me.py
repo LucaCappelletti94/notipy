@@ -26,7 +26,7 @@ class Notipy(ContextDecorator):
         """Create a new istance of Notipy."""
         super(Notipy, self).__init__()
         self._enabled = False
-        if os.path.exists(self.__SINGLE_RUN__) or can_start("Press CTRL+C to start notipy within {i} seconds..."):
+        if os.path.exists(self.__SINGLE_RUN__) or setup_single_run or can_start("Press CTRL+C to start notipy within {i} seconds..."):
             self._setup(setup_single_run)
         self._report = self._interrupt_txt = self._interrupt_html = None
 
@@ -34,15 +34,15 @@ class Notipy(ContextDecorator):
         self._enabled = True
         clear()
         print("Let's setup your notipy!")
-        self._always_use_default = setup_single_run or userinput(
+        self._always_use_default = userinput(
             "always_use_default",
             label="Should I always use the defaults?",
-            default="no",
+            default="yes" if setup_single_run else "no",
             sanitizer="human_bool",
             cache_path=self.__SINGLE_RUN__,
             validator="human_bool",
             auto_clear=True,
-            always_use_default=os.path.exists(self.__SINGLE_RUN__)
+            always_use_default=os.path.exists(self.__SINGLE_RUN__) or setup_single_run
         )
 
         delete_password = userinput(
