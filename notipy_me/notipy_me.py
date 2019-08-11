@@ -29,7 +29,7 @@ class Notipy(ContextDecorator):
             self._setup()
         self._report = self._interrupt_txt = self._interrupt_html = None
 
-    def _setup(self):
+    def _setup(self, setup_single_run:bool=False):
         self._enabled = True
         clear()
         print("Let's setup your notipy!")
@@ -38,19 +38,25 @@ class Notipy(ContextDecorator):
             label="Should I always use the defaults?",
             default="no",
             sanitizer="human_bool",
-            cache_path=".password",
+            cache_path=".single_run",
             validator="human_bool",
             auto_clear=True,
-            always_use_default=os.path.exists(".password")
+            always_use_default=os.path.exists(".single_run")
         )
-        self._email = userinput("email", validator="email", cache_path=".notipy",
-                                always_use_default=self._always_use_default)
+        self._email = userinput(
+            "email",
+            validator="email",
+            cache_path=".notipy",
+            always_use_default=self._always_use_default
+        )
         self._password = userinput(
             "password",
-            cache_path=".password",
+            cache_path=".single_run",
+            validator="non_empty",
+            hidden=True,
             delete_cache=True,
             auto_clear=True,
-            always_use_default=os.path.exists(".password")
+            always_use_default=os.path.exists(".single_run")
         )
         self._send_start_email = userinput(
             "start_email",
