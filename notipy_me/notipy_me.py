@@ -7,7 +7,7 @@ from smtplib import SMTP_SSL
 from datetime import datetime
 import socket
 import getpass
-from typing import List, Dict, Callable, Tuple
+from typing import List, Dict, Callable, Tuple, Union
 import humanize
 import time
 import pandas as pd
@@ -219,12 +219,18 @@ class Notipy(ContextDecorator):
             models.append(model)
         return (data["model_subject"], *models)
 
-    def add_report(self, df: pd.DataFrame):
+    def add_report(self, report: Union[pd.DataFrame, Dict]):
         if not self._enabled:
             return
-        self._report = df if self._report is None else pd.concat([
-            self._report, df
-        ])
+        if isinstance(report, Dict):
+            try:
+                report = pd.DataFrame(report)
+            except ValueError:
+                report = pd.DataFrame(report, index=[0])
+        
+        self._report = (report if self._report is None else pd.concat([
+            self._report, report
+        ])).reset_index(drop=True)
         if time.time() - self._last_report > self._report_timeout*{
             "hours": 60*60,
             "minutes": 60,
