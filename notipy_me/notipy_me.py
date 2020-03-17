@@ -93,6 +93,7 @@ class Notipy(ContextDecorator):
             "task name",
             default=self._task_name,
             validator="non_empty",
+            cache=self._task_name is None,
             cache_path=".notipy",
             always_use_default=self._always_use_default,
             auto_clear=True
