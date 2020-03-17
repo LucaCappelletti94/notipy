@@ -22,15 +22,21 @@ from userinput import userinput, set_validator, can_start, clear
 
 class Notipy(ContextDecorator):
     __SINGLE_RUN__ = ".single_run"
-    def __init__(self, setup_single_run:bool=False):
+
+    def __init__(
+        self,
+        setup_single_run: bool = False,
+        task_name: str = None
+    ):
         """Create a new istance of Notipy."""
         super(Notipy, self).__init__()
         self._enabled = False
+        self._task_name = task_name
         if os.path.exists(self.__SINGLE_RUN__) or setup_single_run or can_start("Press CTRL+C to start notipy within {i} seconds..."):
             self._setup(setup_single_run)
         self._report = self._interrupt_txt = self._interrupt_html = None
 
-    def _setup(self, setup_single_run:bool=False):
+    def _setup(self, setup_single_run: bool = False):
         self._enabled = True
         clear()
         print("Let's setup your notipy!")
@@ -42,7 +48,8 @@ class Notipy(ContextDecorator):
             cache_path=self.__SINGLE_RUN__,
             validator="human_bool",
             auto_clear=True,
-            always_use_default=os.path.exists(self.__SINGLE_RUN__) or setup_single_run
+            always_use_default=os.path.exists(
+                self.__SINGLE_RUN__) or setup_single_run
         )
 
         delete_password = userinput(
@@ -62,7 +69,7 @@ class Notipy(ContextDecorator):
             cache_path=".notipy",
             always_use_default=self._always_use_default
         )
-        
+
         self._password = userinput(
             "password",
             cache_path=self.__SINGLE_RUN__,
@@ -84,6 +91,7 @@ class Notipy(ContextDecorator):
         )
         self._task_name = userinput(
             "task name",
+            default=self._task_name,
             validator="non_empty",
             cache_path=".notipy",
             always_use_default=self._always_use_default,
@@ -227,7 +235,7 @@ class Notipy(ContextDecorator):
                 report = pd.DataFrame(report)
             except ValueError:
                 report = pd.DataFrame(report, index=[0])
-        
+
         self._report = (report if self._report is None else pd.concat([
             self._report, report
         ])).reset_index(drop=True)
