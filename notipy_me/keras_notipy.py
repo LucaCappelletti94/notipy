@@ -17,7 +17,7 @@ class KerasNotipy(Callback):
         """
         super().__init__()
         self._metadata = {} if metadata is None else metadata
-        self._notipy = Notipy(task_name)
+        self._notipy = Notipy(task_name=task_name)
 
     def on_train_begin(self, logs=None):
         """Start notipy as the training begins."""
