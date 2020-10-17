@@ -77,7 +77,15 @@ setup(
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
-    install_requires=["humanize", "validate_email", "tabulate", "environments_utils", "validators", "userinput"],
+    install_requires=[
+        "humanize",
+        "validate_email",
+        "tabulate",
+        "environments_utils",
+        "validators",
+        "userinput",
+        "sanitize_ml_labels"
+    ],
     tests_require=test_deps,
     extras_require=extras,
 )
