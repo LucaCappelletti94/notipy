@@ -1,8 +1,10 @@
 Notipy Me
-=========
+=============
 |sonar_quality| |sonar_maintainability| |sonar_coverage| |pip| |downloads|
 
 A simple python package to send you and any other receiver an email when a portion of code is done running.
+
+A special callback for Keras is now available to get automatic reports for the training of a model.
 
 Setup
 -----
@@ -55,9 +57,27 @@ Usage as context
             }))
             sleep(1)
 
+Usage in a Keras model
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: python
+
+    from notipy_me import KerasNotipy
+
+    my_keras_model = build_my_keras_model(...)
+    my_keras_model.fit(
+        X, y,
+        callbacks=[
+            KerasNotipy(
+                task_name="Training BERT"
+            )
+        ]
+    )
+
+
 Form example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-When you run the script notipy will ask you to enter your email, password etc... it will store into a cache file called `.notipy` every setting except for the password.
+When you run the script Notipy will ask you to enter your email, password etc... it will store into a cache file called `.notipy` every setting except for the password.
 
 |usage|
 
@@ -66,7 +86,7 @@ Known issues
 
 Gmail
 ~~~~~
-I cannot manage to get gmail to work, but it keeps rising an error
+I cannot manage to get Gmail to work, but it keeps rising an error
 logging in with the credentials, even though they are correct. With the
 other mail providers it works fine.
 
