@@ -4,6 +4,7 @@ tabulate
 environments_utils
 validators
 userinput
+sanitize_ml_labels
 
 [test]
 pytest
