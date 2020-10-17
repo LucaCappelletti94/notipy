@@ -180,16 +180,24 @@ class Notipy(ContextDecorator):
         return {**common, **generic, **extension}
 
     def _start(self):
-        self._notify(*self._build_models("start"))
+        self._notify(  # pylint: disable=no-value-for-parameter
+            *self._build_models("start")
+        )
 
     def _completed(self):
-        self._notify(*self._build_models("completed"))
+        self._notify(  # pylint: disable=no-value-for-parameter
+            *self._build_models("completed")
+        )
 
     def _interruption(self):
-        self._notify(*self._build_models("interruption"))
+        self._notify(  # pylint: disable=no-value-for-parameter
+            *self._build_models("interruption")
+        )
 
     def _send_report(self):
-        self._notify(*self._build_models("report"))
+        self._notify(  # pylint: disable=no-value-for-parameter
+            *self._build_models("report")
+        )
 
     def _format_traceback(self, tb, value):
         self._interrupt_txt = "\n".join(format_tb(tb)) + str(value)
@@ -229,6 +237,13 @@ class Notipy(ContextDecorator):
         return (data["model_subject"], *models)
 
     def add_report(self, report: Union[pd.DataFrame, Dict]):
+        """Add given report to the Notipy object to send via email.
+        
+        Parameters
+        --------------------------
+        report: Union[pd.DataFrame, Dict],
+            The report to be added to Notipy.
+        """
         if not self._enabled:
             return
         if isinstance(report, Dict):
@@ -248,7 +263,7 @@ class Notipy(ContextDecorator):
             self._last_report = time.time()
             self._send_report()
 
-    def __enter__(self):
+    def enter(self):
         if self._enabled:
             self._start_time = time.time()
             self._last_report = time.time()
@@ -256,7 +271,10 @@ class Notipy(ContextDecorator):
                 self._start()
         return self
 
-    def __exit__(self, exc_type, exc_val, traceback):
+    def __enter__(self):
+        return self.enter()
+
+    def exit(self, exc_type=None, exc_val=None, traceback=None):
         if not self._enabled:
             return
         if exc_type is not None and exc_type is not KeyboardInterrupt:
@@ -264,3 +282,6 @@ class Notipy(ContextDecorator):
             self._interruption()
         elif exc_type is None:
             self._completed()
+
+    def __exit__(self, exc_type, exc_val, traceback):
+        self.exit(exc_type, exc_val, traceback)
