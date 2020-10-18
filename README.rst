@@ -15,6 +15,8 @@ Just run:
 
    pip install notipy_me
 
+The keras callback will be automatically available if tensorflow is installed.
+
 Preview
 --------------------------
 There are 4 emails types: 
