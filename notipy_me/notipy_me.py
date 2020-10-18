@@ -162,7 +162,7 @@ class Notipy(ContextDecorator):
         msg["From"] = self._email
         msg.attach(MIMEText(txt, 'plain'))
         msg.attach(MIMEText(html, 'html'))
-        server_ssl.sendmail(msg["From"], msg["To"], msg.as_string())
+        server_ssl.sendmail(msg["From"], self._recipients, msg.as_string())
         server_ssl.close()
 
     @property
