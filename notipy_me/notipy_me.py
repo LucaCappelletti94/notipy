@@ -158,7 +158,7 @@ class Notipy(ContextDecorator):
         server_ssl.login(self._email, self._password)
         msg = MIMEMultipart('alternative')
         msg["Subject"] = subject
-        msg["To"] = ",".join(self._recipients)
+        msg["To"] = ", ".join(self._recipients)
         msg["From"] = self._email
         msg.attach(MIMEText(txt, 'plain'))
         msg.attach(MIMEText(html, 'html'))
