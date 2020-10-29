@@ -4,7 +4,7 @@ tabulate
 environments_utils
 validators
 userinput
-sanitize_ml_labels
+sanitize_ml_labels>=1.0.16
 
 [test]
 pytest
