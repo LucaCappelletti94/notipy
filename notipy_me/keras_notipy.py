@@ -1,8 +1,6 @@
 from typing import Dict
 from sanitize_ml_labels import sanitize_ml_labels
 from .notipy_me import Notipy
-from time import time
-from humanize import naturaldelta
 
 try:
     from tensorflow.keras.callbacks import Callback
@@ -38,15 +36,10 @@ else:
             self._notipy = Notipy(task_name=task_name)
             self._report_only_validation = report_only_validation
             self._sanitize_metrics = sanitize_metrics
-            self._start_epoch = 0
 
         def on_train_begin(self, logs=None):
             """Start notipy as the training begins."""
             self._notipy.enter()
-
-        def on_epoch_begin(self, epoch: int, logs=None):
-            """When the epoch starts we log the epoch when it started."""
-            self._start_epoch = time()
 
         def on_epoch_end(self, epoch: int, logs=None):
             """When the epoch ends we report how the model is doing."""
@@ -62,7 +55,6 @@ else:
                         for metric, value in logs.items()
                         if not self._report_only_validation or metric.startswith("val") or not log_has_validation
                     },
-                    "duration": naturaldelta(time() - self._start_epoch),
                     "epoch": epoch
                 })
 

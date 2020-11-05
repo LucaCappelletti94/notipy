@@ -15,6 +15,7 @@ from validators import domain
 from environments_utils import is_stdout_enabled
 from tabulate import tabulate
 from validate_email import validate_email
+from humanize import naturaldelta
 import sys
 from traceback import format_tb
 from userinput import userinput, set_validator, can_start, clear
@@ -236,13 +237,22 @@ class Notipy(ContextDecorator):
             models.append(model)
         return (data["model_subject"], *models)
 
-    def add_report(self, report: Union[pd.DataFrame, Dict]):
+    def add_report(
+        self,
+        report: Union[pd.DataFrame, Dict],
+        add_elapsed_time: bool = True
+    ):
         """Add given report to the Notipy object to send via email.
-        
+
         Parameters
         --------------------------
         report: Union[pd.DataFrame, Dict],
             The report to be added to Notipy.
+        add_elapsed_time: bool = True,
+            Wether to add metadata relative to how much time has
+            elapsed since either start or last report.
+            The metadata are added both for the time in seconds and the time
+            in human-readable strings.
         """
         if not self._enabled:
             return
@@ -252,21 +262,29 @@ class Notipy(ContextDecorator):
             except ValueError:
                 report = pd.DataFrame(report, index=[0])
 
+        if add_elapsed_time:
+            delta = time.time() - self._last_report
+            report["elapsed_time"] = delta
+            report["human_elapsed_time"] = naturaldelta(delta)
+
+        self._last_report = time.time()
+
         self._report = (report if self._report is None else pd.concat([
             self._report, report
         ])).reset_index(drop=True)
-        if time.time() - self._last_report > self._report_timeout*{
+        if time.time() - self._last_sent_report > self._report_timeout*{
             "hours": 60*60,
             "minutes": 60,
             "seconds": 1
         }[self._report_timeout_unit]:
-            self._last_report = time.time()
+            self._last_sent_report = time.time()
             self._send_report()
 
     def enter(self):
         if self._enabled:
             self._start_time = time.time()
             self._last_report = time.time()
+            self._last_sent_report = time.time()
             if self._send_start_email:
                 self._start()
         return self

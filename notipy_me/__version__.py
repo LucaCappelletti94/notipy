@@ -1,1 +1,2 @@
-__version__ = "1.3.21"
+"""Current version of the NotipyMe package."""
+__version__ = "1.3.22"
