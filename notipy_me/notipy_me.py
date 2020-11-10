@@ -17,6 +17,7 @@ from tabulate import tabulate
 from validate_email import validate_email
 from humanize import naturaldelta
 import sys
+import warnings
 from traceback import format_tb
 from userinput import userinput, set_validator, can_start, clear
 
@@ -155,16 +156,22 @@ class Notipy(ContextDecorator):
         )
 
     def _notify(self, subject: str, txt: str, html: str):
-        server_ssl = SMTP_SSL(self._smtp_server, self._port)
-        server_ssl.login(self._email, self._password)
-        msg = MIMEMultipart('alternative')
-        msg["Subject"] = subject
-        msg["To"] = ", ".join(self._recipients)
-        msg["From"] = self._email
-        msg.attach(MIMEText(txt, 'plain'))
-        msg.attach(MIMEText(html, 'html'))
-        server_ssl.sendmail(msg["From"], self._recipients, msg.as_string())
-        server_ssl.close()
+        try:
+            server_ssl = SMTP_SSL(self._smtp_server, self._port)
+            server_ssl.login(self._email, self._password)
+            msg = MIMEMultipart('alternative')
+            msg["Subject"] = subject
+            msg["To"] = ", ".join(self._recipients)
+            msg["From"] = self._email
+            msg.attach(MIMEText(txt, 'plain'))
+            msg.attach(MIMEText(html, 'html'))
+            server_ssl.sendmail(msg["From"], self._recipients, msg.as_string())
+            server_ssl.close()
+        except Exception:
+            warnings.warn("Unable to send email with subject '{subject}'!".format(
+                subject=subject
+            ))
+        
 
     @property
     def _pwd(self):
